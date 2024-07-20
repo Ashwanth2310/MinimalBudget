@@ -4,6 +4,7 @@ import { Category ,Transaction} from '../types';
 import { useSQLiteContext } from 'expo-sqlite';
 import TransactionList from '../components/TransactionsList';
 
+
 const Home: React.FC = () => {
     const [categories, setCategories] = React.useState<Category[]>([]);
     const [transactions, setTransactions] = React.useState<Transaction[]>([]);
@@ -33,7 +34,7 @@ const Home: React.FC = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={{padding:15,paddingVertical:150}}>
+        <ScrollView contentContainerStyle={{padding:15,paddingVertical:20}}>
             <TransactionList
             categories={categories}
             transactions={transactions}
