@@ -4,6 +4,9 @@ import { Category, Transaction } from "../types";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { categoryColors, categoryEmojies } from "../constants";
 import Card from "./ui/Card";
+import { useFonts } from "expo-font";
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from "react";
 
 interface TransactionListItemProps {
   transaction: Transaction;
@@ -14,11 +17,34 @@ export default function TransactionListItem({
   transaction,
   categoryInfo,
 }: TransactionListItemProps) {
+
+  const [fontsLoaded] = useFonts({
+    "Nothing": require("../assets/fonts/nothingfont.otf"),
+  });
+
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   const iconName =
     transaction.type === "Expense" ? "minuscircle" : "pluscircle";
   const color = transaction.type === "Expense" ? "red" : "green";
   const categoryColor = categoryColors[categoryInfo?.name ?? "Default"];
   const emoji = categoryEmojies[categoryInfo?.name ?? "Default"];
+  
   return (
     <Card>
       <View style={styles.row}>
@@ -38,7 +64,6 @@ export default function TransactionListItem({
     </Card>
   );
 }
-
 
 function CategoryItem({
   categoryColor,
@@ -80,8 +105,8 @@ function Amount({
         mode={ResizeTextMode.max_lines}
         numberOfLines={1}
         style={[styles.amount, { maxWidth: "80%" }]}
-      >
-        ${amount}
+      ><Text style={{fontFamily: "Nothing"}}>
+        ${amount}</Text>
       </AutoSizeText>
     </View>
   );
@@ -91,21 +116,24 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 32,
     fontWeight: "800",
-    color:"white"
+    color: "white",
+    fontFamily: "Nothing"
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
+    fontFamily: "Nothing"
   },
   categoryContainer: {
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 3,
     alignSelf: "flex-start",
-    color:"white"
+    color: "white"
   },
   categoryText: {
-    fontSize: 12,
+    fontSize: 13,
+    fontFamily: "Nothing"
   },
 });
